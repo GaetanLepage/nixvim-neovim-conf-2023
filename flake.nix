@@ -61,7 +61,10 @@
           slides = pkgs.writeShellApplication {
             name = "slides";
             runtimeInputs = [presenterm];
-            text = "presenterm slides.md";
+            text = ''
+              cd ${./.}
+              presenterm slides.md
+            '';
           };
         };
 
