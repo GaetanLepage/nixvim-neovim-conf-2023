@@ -5,7 +5,7 @@ title: "Nixvim: Configure Neovim with the power of Nix"
 Nixvim: Configure Neovim with the power of Nix
 ---
 
-![](nixvim_logo.png)
+![](images/nixvim_logo.png)
 
 <!-- end_slide -->
 What is Nix ?
@@ -14,12 +14,12 @@ What is Nix ?
 
 <!-- column: 0 -->
 
-![](nix_meme_bathroom.png)
+![](images/nix_meme_bathroom.png)
 <!-- pause -->
 
 <!-- column: 1 -->
 
-![](nix_trinity.png)
+![](images/nix_trinity.png)
 
 <!-- pause -->
 - A functional programming language
@@ -37,21 +37,21 @@ Nixpkgs: the nix package repository
 <!-- column_layout: [2, 3] -->
 
 <!-- column: 0 -->
-![](nixpkgs_repo.png)
+![](images/nixpkgs_repo.png)
 
 <!-- pause -->
 
 <!-- column: 1 -->
 - ~80,000 package
 
-![](repology.png)
+![](images/repology.png)
 
 <!-- end_slide -->
 Vim plugins too !
 ---
 
 
-![](nix_search_vim_plugins.png)
+![](images/nix_search_vim_plugins.png)
 
 ```sh
 nix-repl> lib.length (lib.attrNames vimPlugins)
@@ -62,7 +62,7 @@ nix-repl> lib.length (lib.attrNames vimPlugins)
 NixOS: A declarative and reproducible Linux distribution
 ---
 
-![](nixos_meme.png)
+![](images/nixos_meme.png)
 
 <!-- end_slide -->
 Home-manager: Manage your user environment using Nix
@@ -184,7 +184,7 @@ Of course !
 Nixvim
 ---
 
-![](nixvim_logo_small.png)
+![](images/nixvim_logo_small.png)
 
 <!-- pause -->
 Apply the same idea as NixOS/Home-manager to Neovim configuration
