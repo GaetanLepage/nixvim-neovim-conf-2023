@@ -27,6 +27,7 @@ What is Nix ?
   - Lets you write derivations
 <!-- pause -->
 - A package manager and repository (`nixpkgs`)
+  - Available on  & 
 <!-- pause -->
 - An operating system (NixOS)
 
@@ -64,9 +65,51 @@ NixOS: A declarative and reproducible Linux distribution
 
 ![](images/nixos_meme.png)
 
+<!-- pause -->
+- Declarative
+
+Your entire system define in a config file (`configuration.nix`)
+<!-- pause -->
+- Reproducible
+<!-- pause -->
+- Rolling or stable
+
+<!-- end_slide -->
+A config file for your distro
+---
+
+```nix
+# /etc/nixos/configuration.nix
+{
+  time.timeZone = "Europe/Paris";
+
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+  };
+
+  hardware.opengl.enable = true;
+
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
+
+  environment.systemPackages = with pkgs; [
+    firefox
+    git
+    mpv
+  ];
+}
+```
+
 <!-- end_slide -->
 Home-manager: Manage your user environment using Nix
 ---
+
+Same idea... for the home environment !
+<!-- pause -->
 
 Features:
 - Installs programs
@@ -95,10 +138,10 @@ Home-manager: Manage your user environment using Nix
     CARGO_HOME = "~/.local/share/cargo";
   };
 
-  home.packages = [
-    pkgs.gcc
-    pkgs.steam
-    pkgs.libreoffice
+  home.packages = with pkgs; [
+    gcc
+    steam
+    libreoffice
   ];
 
   programs.tmux = {
@@ -196,6 +239,29 @@ Apply the same idea as NixOS/Home-manager to Neovim configuration
 
 _Guarantee to get your custom version of Neovim 100% ready to go._
 
+<!-- pause -->
+
+**Not a Neovim distribution !**
+
+<!-- end_slide -->
+Options and globals
+---
+
+```nix
+{
+  options = {
+    updatetime = 100; # Faster completion
+    fileencoding = "utf-8"; # File-content encoding for the current buffer
+    relativenumber = true; # Relative line numbers
+  };
+
+  globals = {
+    mapleader = " ";
+    maplocalleader = " ";
+  };
+}
+```
+
 <!-- end_slide -->
 Basic settings
 ---
@@ -213,7 +279,6 @@ Basic settings
   };
 }
 ```
-
 
 <!-- end_slide -->
 Set keymaps
@@ -264,6 +329,106 @@ Set autocommands and augroups
 ```
 
 <!-- end_slide -->
+Treesitter
+---
+
+```nix
+{
+  plugins = {
+    treesitter = {
+      enable = true;
+
+      folding = true;
+      indent = true;
+    };
+
+    # Modules too !
+    treesitter-refactor = {
+      enable = true;
+      highlightDefinitions.enable = true;
+    };
+  };
+}
+```
+
+<!-- end_slide -->
+Some useful plugins
+---
+
+```nix
+{
+  plugins = {
+    harpoon = {
+      enable = true;
+
+      keymaps = {
+        addFile = "<leader>a";
+        toggleQuickMenu = "<C-e>";
+      };
+    };
+
+    telescope = {
+      enable = true;
+
+      defaults.file_ignore_patterns = [ "^.git/" ];
+      keymaps."<C-p>" = "git_files";
+    };
+  };
+}
+```
+
+<!-- end_slide -->
+LSP and completions
+---
+
+```nix
+{
+  plugins = {
+    lsp = {
+      enable = true;
+
+      servers = {
+        rust-analyzer.enable = true;
+        nil_ls.enable = true;
+      };
+    };
+
+    nvim-cmp = {
+      enable = true;
+
+      snippet.expand = "luasnip";
+      sources = [
+        {name = "nvim_lsp";}
+        {name = "luasnip";}
+      ];
+    };
+  };
+}
+```
+
+<!-- end_slide -->
+Extensible !
+---
+
+```nix
+{
+  extraPackages = [
+    pkgs.git
+  ];
+
+  extraPlugins = [
+    pkgs.vimPlugins.lir-nvim
+  ];
+
+  extraConfigLua = ''
+    require('lir').setup({
+      show_hidden_files = false,
+    })
+  '';
+}
+```
+
+<!-- end_slide -->
 Installation methods
 ---
 <!-- pause -->
@@ -290,11 +455,11 @@ Thanks for listening !
 # Get in touch
 
 * 󰖟 glepage.com
-* 󰫑 @glepage@fosstodon.org
 *  GaetanLepage
+* 󰫑 @glepage@fosstodon.org
 *  @GaetanLepage_
 
 # Resources:
 * _󰖟  nixos.org_
 * _  github.com/nix-community/nixvim_
-* _󰗃 youtube.com/@vimjoyer_
+* _󰗃  youtube.com/@vimjoyer_
