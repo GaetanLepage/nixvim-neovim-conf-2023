@@ -40,7 +40,7 @@
             ];
 
             buildInputs = [libsixel];
-            cargoBuildFlags = ["--features" "sixel"];
+            buildFeatures = ["sixel"];
           };
 
         nixvimLib = nixvim.lib.${system};
