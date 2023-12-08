@@ -24,8 +24,6 @@ What is Nix ?
 <!-- pause -->
 - A functional programming language
 <!-- pause -->
-  - Lets you write derivations
-<!-- pause -->
 - A package manager and repository (`nixpkgs`)
   - Available on  & 
 <!-- pause -->
@@ -72,7 +70,7 @@ Your entire system define in a config file (`configuration.nix`)
 <!-- pause -->
 - Reproducible
 <!-- pause -->
-- Rolling or stable
+- Based on the nix package manager
 
 <!-- end_slide -->
 A config file for your distro
@@ -83,24 +81,24 @@ A config file for your distro
 {
   time.timeZone = "Europe/Paris";
 
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-  };
-
-  hardware.opengl.enable = true;
-
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
-  };
-
+  # Install some packages
   environment.systemPackages = with pkgs; [
     firefox
     git
     mpv
   ];
+
+  # Enable SSH server
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+  };
+
+  services.xserver = {
+    enable = true;
+    # Install Gnome
+    desktopManager.gnome.enable = true;
+  };
 }
 ```
 
@@ -115,6 +113,7 @@ Features:
 - Installs programs
 - Configures them
 - Can configure every bit of your `$HOME`
+- Runs on [    ]
 <!-- pause -->
 
 => The ultimate ricing tool
@@ -159,15 +158,9 @@ Home-manager: Manage your user environment using Nix
     userName = "Gaetan Lepage";
   };
 
-  xdg = {
-    enable = true;
-    userDirs = {
-      enable = true;
-      desktop = "/home/gaetan/Bureau";
-    };
-  };
+  services.redshift.enable = true;
 
-  sway = {
+  wayland.windowManager.sway = {
     enable = true;
     window.titlebar = false;
     startup = [{command = "firefox";}];
@@ -183,7 +176,7 @@ Home-manager: Manage your user environment using Nix
 <!-- end_slide -->
 Neovim configuration in Home-manager
 ---
-<!-- column_layout: [1, 2] -->
+<!-- column_layout: [1, 1] -->
 
 <!-- column: 0 -->
 Can we configure Neovim with Home-manager ?
@@ -329,30 +322,7 @@ Set autocommands and augroups
 ```
 
 <!-- end_slide -->
-Treesitter
----
-
-```nix
-{
-  plugins = {
-    treesitter = {
-      enable = true;
-
-      folding = true;
-      indent = true;
-    };
-
-    # Modules too !
-    treesitter-refactor = {
-      enable = true;
-      highlightDefinitions.enable = true;
-    };
-  };
-}
-```
-
-<!-- end_slide -->
-Some useful plugins
+Install and configure plugins
 ---
 
 ```nix
@@ -377,6 +347,11 @@ Some useful plugins
 }
 ```
 
+<!-- pause -->
+... and 164 more included plugins !
+
+(neotree, fugitive, nvim-dap, nvim-cmp...)
+
 <!-- end_slide -->
 LSP and completions
 ---
@@ -388,19 +363,21 @@ LSP and completions
       enable = true;
 
       servers = {
-        rust-analyzer.enable = true;
         nil_ls.enable = true;
+        tsserver.enable = true;
+
+        rust-analyzer = {
+          enable = true;
+          installCargo = true;
+
+          autostart = true;
+
+          settings = {
+            numThreads = 16;
+            runnables.extraArgs = ["--release"];
+          };
+        };
       };
-    };
-
-    nvim-cmp = {
-      enable = true;
-
-      snippet.expand = "luasnip";
-      sources = [
-        {name = "nvim_lsp";}
-        {name = "luasnip";}
-      ];
     };
   };
 }
@@ -432,8 +409,8 @@ Extensible !
 Installation methods
 ---
 <!-- pause -->
-- NixOS module
-- Home-manager module
+- NixOS module [  ]
+- Home-manager module [    ]
 
 => Installs neovim and applies the configuration
 ```nix
@@ -445,7 +422,15 @@ Installation methods
 ```
 <!-- pause -->
 
-- Standalone flake 
+- Standalone flake [    ]
+
+
+```
+┌────────────────────────┐              ┌──────┐
+│         Inputs         │  flake.nix   │ nvim │
+│ (nixpkgs, nixvim, ...) │ ───────────> │      │
+└────────────────────────┘              └──────┘
+```
 
 
 <!-- end_slide -->
@@ -459,7 +444,15 @@ Thanks for listening !
 * 󰫑 @glepage@fosstodon.org
 *  @GaetanLepage_
 
+<!-- pause -->
+
 # Resources:
 * _󰖟  nixos.org_
 * _  github.com/nix-community/nixvim_
 * _󰗃  youtube.com/@vimjoyer_
+
+<!-- pause -->
+
+# Nixvim contributors:
+- Pedro Alves _(@pta2002_), original creator
+- Quentin Boyer (_@traxys_)
